@@ -23,6 +23,7 @@ function MainDrawerNavigator() {
         <Drawer.Screen name='experience' component={AllExperience} />
         <Drawer.Screen name='edit' component={EditProfile} />
         <Drawer.Screen name='landing' component={LandingPage} />
+        <Drawer.Screen name='calendar' component={CalendarScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   )
