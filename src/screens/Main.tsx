@@ -4,12 +4,8 @@ import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { HomeStackParamList } from "../navigations/stack/HomeStackNavigator";
 import { homeNavigatons } from "../constants";
 
-type MainScreenProps = StackScreenProps<
-  HomeStackParamList,
-  typeof homeNavigatons.ALLEXPERIENCE
->;
 
-function Main({ navigation }: MainScreenProps) {
+function Main() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.card}>
@@ -75,11 +71,6 @@ function Main({ navigation }: MainScreenProps) {
             </Text>
           </View>
           <View>
-            <Text
-              onPress={() => navigation.navigate(homeNavigatons.ALLEXPERIENCE)}
-            >
-              더보기 &gt;
-            </Text>
           </View>
         </View>
         <View style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>

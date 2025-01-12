@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { authNavigations } from '../../constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../../screens/Login';

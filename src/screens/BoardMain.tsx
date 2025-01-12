@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native
 import PostCard from "../components/post"; 
 import Ranking from "../components/ranking";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "react-router-dom";
 
 
 const dummyPostData = [
@@ -42,10 +43,10 @@ const dummyRankingData = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("게시판");
-  const navigation = useRoute();
+  const navigation = useNavigation();
 
   const handlePostPress = ( id: string ) => {
-    navigation.navigate("./PostCardDetail", { id });
+    //navigation.navigate("PostCardDetail/[id].tsx", { id });
   }
 
   return (

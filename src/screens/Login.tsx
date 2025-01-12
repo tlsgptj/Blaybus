@@ -40,7 +40,7 @@ export default function LoginPage() {
 
       if (user) {
         Alert.alert("로그인 성공", `환영합니다!`);
-        useNavigation.replace("/main"); 
+        //useNavigation.replace("/main"); 
       } else {
         Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
       }
