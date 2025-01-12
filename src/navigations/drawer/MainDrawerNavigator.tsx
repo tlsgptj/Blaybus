@@ -8,6 +8,7 @@ import Post from '../../screens/Post';
 import AllExperience from '../../screens/AllExperience';
 import EditProfile from '../../screens/EditProfile';
 import LandingPage from '../../screens/Landing';
+import CalendarScreen from '../../screens/CalendarScreen';
 
 
 
@@ -22,6 +23,7 @@ function MainDrawerNavigator() {
         <Drawer.Screen name='experience' component={AllExperience} />
         <Drawer.Screen name='edit' component={EditProfile} />
         <Drawer.Screen name='landing' component={LandingPage} />
+        <Drawer.Screen name='calendar' component={CalendarScreen} />
     </Drawer.Navigator>
   )
 }

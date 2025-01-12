@@ -14,6 +14,7 @@ function AuthStackNavigator() {
   return (
     <Stack.Navigator>
         <Stack.Screen name={authNavigations.LOGIN} component={Login}/>
+        
     </Stack.Navigator>
   )
 }
