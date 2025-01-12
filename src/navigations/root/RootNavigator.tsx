@@ -6,7 +6,7 @@ import AuthStackNavigator from '../stack/AuthStackNavigator';
 
 
 function RootNavigator() {
-    const isLogin = false;
+    const isLogin = true;
 
   return <>{isLogin ? <MainDrawerNavigator /> : <AuthStackNavigator />}</>
 }
