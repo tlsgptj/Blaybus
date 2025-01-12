@@ -10,9 +10,9 @@ import {
   NativeScrollEvent,
 } from "react-native";
 import { SvgProps } from "react-native-svg";
-import Logo from "@/assets/images/LOGO.svg";
-import LandingImport1 from "@/assets/images/landingImport1.svg";
-import LandingImport2 from "@/assets/images/landingImport2.svg";
+//import Logo from "@/assets/images/LOGO.svg";
+//import LandingImport1 from "@/assets/images/landingImport1.svg";
+//import LandingImport2 from "@/assets/images/landingImport2.svg";
 
 const { width } = Dimensions.get("window");
 
@@ -25,15 +25,15 @@ type Slide = {
     fontWeight?: "normal" | "bold";
   }[];
 };
-
-const slides: Slide[] = [
-  {
-    id: "1",
-    Svg: Logo,
-  },
-  {
-    id: "2",
-    texts: [
+{/* 
+  const slides: Slide[] = [
+    {
+      id: "1",
+      Svg: Logo,
+    },
+    {
+      id: "2",
+      texts: [
       { text: "경험치와 즐거움", fontSize: 28, fontWeight: "bold" },
       { text: "경험치를 얻어 일 속에", fontSize: 20 },
       { text: "즐거움을 얻어보세요!", fontSize: 20 },
@@ -51,6 +51,7 @@ const slides: Slide[] = [
     Svg: LandingImport2,
   },
 ];
+*/}
 
 export default function LandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);

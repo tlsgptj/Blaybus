@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import PostCard from "../components/post"; 
 import Ranking from "../components/ranking";
-import { useRoute } from "@react-navigation/native";
-import { useNavigation } from "react-router-dom";
+import { useNavigation } from "@react-navigation/native";
+
 
 
 const dummyPostData = [
