@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 export default function PostCardDetail() { 
@@ -8,10 +8,26 @@ export default function PostCardDetail() {
 
   return (
     <View style={styles.container}>
+      <Image source={require('@/assets/images/arrow2.png')}
+        style={{width : 10,
+                height: 10,
+                marginRight: 4}}/>
+
       <Text style={styles.team}>인사팀</Text>
       <Text style={styles.title}>게시글 상세 페이지</Text>
       <Text style={styles.content}>게시글 ID: {id}</Text>
+
+      <Image source={require('@/assets/images/heart.png')}
+        style={{width: 10,
+                height: 10,
+                marginRight: 4}}/>
+
       <Text style={styles.like}>300</Text>
+      <Image source={require('@/assets/images/eyes.png')}
+        style={{width : 10,
+                height: 10,
+                marginRight: 4}}/>
+
       <Text style={styles.eyes}>40</Text>
     </View>
   );
