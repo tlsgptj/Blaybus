@@ -44,7 +44,7 @@ function MyPage() {
           <Text>2023-01-01</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text>비번</Text>
+          <Text>비밀번호호</Text>
           <Text>****</Text>
         </View>
       </View>
