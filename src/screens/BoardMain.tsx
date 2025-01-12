@@ -41,7 +41,7 @@ const dummyRankingData = [
   { id: "5", name: "김지수", team: "사업기획팀", rank: 5 , progress : 50},
 ];
 
-export default function App() {
+ function BoardMain() {
   const [activeTab, setActiveTab] = useState("게시판");
   const navigation = useNavigation();
 
@@ -162,3 +162,5 @@ const styles = StyleSheet.create({
     color: "#666",
   },
 });
+
+export default BoardMain;
