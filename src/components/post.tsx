@@ -1,15 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import RedCheck from "../assets/images/redCheck.svg"; 
-import EmptyCircle from "../assets/image/EmptyCicle.svg";
+import RedCheck from "../assets/images/redCheck.svg";
+//import EmptyCircle from "../assets/image/EmptyCicle.svg";
 
 interface PostCardProps {
-  category: string; 
-  title: string; 
-  content: string; 
-  isNew: boolean; 
-  isChecked: boolean; 
-  onPress: () => void; 
+  category: string;
+  title: string;
+  content: string;
+  isNew: boolean;
+  isChecked: boolean;
+  onPress: () => void;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -19,13 +19,12 @@ const PostCard: React.FC<PostCardProps> = ({
   isNew,
   isChecked,
   onPress,
-  
 }) => {
-  const [ isRead, setIsRead ] = React.useState(false);
+  const [isRead, setIsRead] = React.useState(false);
 
   const handlePress = () => {
-    setIsRead(true); 
-    onPress(); 
+    setIsRead(true);
+    onPress();
   };
 
   return (
@@ -42,9 +41,9 @@ const PostCard: React.FC<PostCardProps> = ({
       </View>
 
       <Text style={styles.title}>{title}</Text>
-      
-      <Text style={styles.content}>{content}</Text>
 
+      <Text style={styles.content}>{content}</Text>
+      {/* 
       <View style={styles.iconContainer}>
         {isChecked ? (
           <RedCheck width={20} height={20} fill="#ff0000" />
@@ -52,6 +51,7 @@ const PostCard: React.FC<PostCardProps> = ({
           <EmptyCircle width={24} height={24} fill="#d9d9d9" />
         )}
       </View>
+          */}
     </TouchableOpacity>
   );
 };

@@ -12,6 +12,7 @@ import {
 import { SvgProps } from "react-native-svg";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 import Logo from "@/assets/images/LOGO.svg";
 import LandingImport1 from "@/assets/images/landingImport1.svg";
 import LandingImport2 from "@/assets/images/landingImport2.svg";
@@ -28,32 +29,33 @@ type Slide = {
     fontWeight?: "normal" | "bold";
   }[];
 };
-
-const slides: Slide[] = [
-  {
-    id: "1",
-    Svg: Logo,
-  },
-  {
-    id: "2",
-    texts: [
-      { text: "경험치와 즐거움", fontSize: 28, fontWeight: "bold" },
-      { text: "경험치를 얻어 일 속에", fontSize: 20 },
-      { text: "즐거움을 얻어보세요!", fontSize: 20 },
-    ],
-    Svg: LandingImport1,
-  },
-  {
-    id: "3",
-    texts: [
-      { text: "내 눈으로 직접", fontSize: 28, fontWeight: "bold" },
-      { text: "확인하는 내 성과", fontSize: 28, fontWeight: "bold" },
-      { text: "한 번의 클릭으로 내 성과를", fontSize: 20 },
-      { text: "확인해보세요!", fontSize: 20 },
-    ],
-    Svg: LandingImport2,
-  },
-];
+{/* 
+  const slides: Slide[] = [
+    {
+      id: "1",
+      Svg: Logo,
+    },
+    {
+      id: "2",
+      texts: [
+        { text: "경험치와 즐거움", fontSize: 28, fontWeight: "bold" },
+        { text: "경험치를 얻어 일 속에", fontSize: 20 },
+        { text: "즐거움을 얻어보세요!", fontSize: 20 },
+      ],
+      Svg: LandingImport1,
+    },
+    {
+      id: "3",
+      texts: [
+        { text: "내 눈으로 직접", fontSize: 28, fontWeight: "bold" },
+        { text: "확인하는 내 성과", fontSize: 28, fontWeight: "bold" },
+        { text: "한 번의 클릭으로 내 성과를", fontSize: 20 },
+        { text: "확인해보세요!", fontSize: 20 },
+      ],
+      Svg: LandingImport2,
+    },
+  ];
+  */}
 
 const Stack = createStackNavigator();
 
@@ -117,6 +119,8 @@ function LandingPage() {
   );
 }
 
+const Stack = createStackNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -176,3 +180,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+

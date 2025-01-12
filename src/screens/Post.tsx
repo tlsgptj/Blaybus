@@ -1,27 +1,54 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+interface PostCardProps {
+  category: string;
+  title: string;
+  content: string;
+  isNew: boolean;
+  isChecked: boolean;
+  onPress: () => void;
+}
 
+function Post({category,
+  title,
+  content,
+  isNew,
+  isChecked,
+  onPress,}) {
 
-function Post() {
-  return (
-    <TouchableOpacity
-    style={styles.container}
-  
-  >
-    <View style={styles.header}>
-      <Text style={styles.category}></Text>
-      
-    </View>
-
-    <Text style={styles.title}></Text>
+    const [isRead, setIsRead] = React.useState(false);
     
-    <Text style={styles.content}></Text>
-
-    <View style={styles.iconContainer}>
-      
-    </View>
-  </TouchableOpacity>
+      const handlePress = () => {
+        setIsRead(true);
+        onPress();
+      };
+  return (
+     <TouchableOpacity
+       style={[
+         styles.container,
+         { backgroundColor: isRead ? "#ffe6e6" : "#ffffff" }, // 읽음 상태에 따른 배경색
+       ]}
+       onPress={handlePress}
+     >
+       <View style={styles.header}>
+         <Text style={styles.category}>post</Text>
+         {isNew && <Text style={styles.newBadge}>N</Text>}
+       </View>
+ 
+       <Text style={styles.title}>{title}</Text>
+ 
+       <Text style={styles.content}>게시판입니다.</Text>
+       {/* 
+       <View style={styles.iconContainer}>
+         {isChecked ? (
+           <RedCheck width={20} height={20} fill="#ff0000" />
+         ) : (
+           <EmptyCircle width={24} height={24} fill="#d9d9d9" />
+         )}
+       </View>
+           */}
+     </TouchableOpacity>
   )
 }
 
