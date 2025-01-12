@@ -5,6 +5,7 @@ import Main from '../../screens/Main';
 import MyPage from '../../screens/MyPage';
 import BoardMain from '../../screens/BoardMain';
 import Post from '../../screens/Post';
+import AllExperience from '../../screens/AllExperience';
 
 
 
@@ -16,6 +17,7 @@ function MainDrawerNavigator() {
         <Drawer.Screen name='mypage' component={MyPage}/>
         <Drawer.Screen name='board' component={BoardMain}/>
         <Drawer.Screen name='post' component={Post} />
+        <Drawer.Screen name='experience' component={AllExperience} />
     </Drawer.Navigator>
   )
 }

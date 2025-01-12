@@ -2,4 +2,8 @@ const authNavigations = {
     LOGIN: 'Login',
 } as const;
 
-export {authNavigations}
+const homeNavigatons = {
+    ALLEXPERIENCE : 'allexperience'
+} as const
+
+export {authNavigations, homeNavigatons}
