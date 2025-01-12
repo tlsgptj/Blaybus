@@ -6,9 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { SvgProps } from "react-native-svg";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import Logo from "@/assets/images/LOGO.svg";
 import LandingImport1 from "@/assets/images/landingImport1.svg";
 import LandingImport2 from "@/assets/images/landingImport2.svg";
@@ -18,7 +21,7 @@ const { width } = Dimensions.get("window");
 
 type Slide = {
   id: string;
-  Svg: React.FC<any>;
+  Svg: React.FC<SvgProps>;
   texts?: {
     text: string;
     fontSize: number;
@@ -52,10 +55,12 @@ const slides: Slide[] = [
   },
 ];
 
-function LandingPage({ navigation }: any) {
+const Stack = createStackNavigator();
+
+function LandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(index);
   };
@@ -69,33 +74,40 @@ function LandingPage({ navigation }: any) {
         onScroll={handleScroll}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={[styles.slide, { width }]}>
-            <item.Svg width={200} height={200} style={styles.image} />
-            {item.texts &&
-              item.texts.map((textItem, index) => (
-                <Text
-                  key={index}
-                  style={[
-                    styles.text,
-                    {
-                      fontSize: textItem.fontSize,
-                      fontWeight: textItem.fontWeight || "normal",
-                    },
-                  ]}
-                >
-                  {textItem.text}
-                </Text>
-              ))}
-          </View>
-        )}
+        renderItem={({ item }) => {
+          const SvgComponent = item.Svg;
+          return (
+            <View style={[styles.slide, { width }]}>
+              <SvgComponent width={200} height={200} style={styles.image} />
+              {item.texts &&
+                item.texts.map((textItem, index) => (
+                  <Text
+                    key={index}
+                    style={[
+                      styles.text,
+                      {
+                        fontSize: textItem.fontSize,
+                        fontWeight: textItem.fontWeight || "normal",
+                      },
+                    ]}
+                  >
+                    {textItem.text}
+                  </Text>
+                ))}
+            </View>
+          );
+        }}
       />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
             currentIndex === 2 ? styles.buttonEnabled : styles.buttonDisabled,
           ]}
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => {
+            if (currentIndex === 2) {
+              navigation.navigate("Login");
+            }
+          }}
           disabled={currentIndex !== 2}
         >
           <Text style={styles.buttonText}>시작하기</Text>
@@ -104,8 +116,6 @@ function LandingPage({ navigation }: any) {
     </View>
   );
 }
-
-const Stack = createStackNavigator();
 
 export default function App() {
   return (
@@ -166,4 +176,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
