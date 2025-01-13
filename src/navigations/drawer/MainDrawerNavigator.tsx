@@ -10,7 +10,7 @@ import EditProfile from "../../screens/EditProfile";
 import LandingPage from "../../screens/Landing";
 import { NavigationContainer } from "@react-navigation/native";
 import CalendarScreen from "../../screens/CalendarScreen";
-import Login from "../../screens/Login";
+import AlarmScreen from "../../screens/AlarmScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -25,7 +25,7 @@ function MainDrawerNavigator() {
       <Drawer.Screen name="edit" component={EditProfile} />
       <Drawer.Screen name="landing" component={LandingPage} />
       <Drawer.Screen name="calendar" component={CalendarScreen} />
-      <Drawer.Screen name="login" component={Login}/>
+      <Drawer.Screen name="alarm" component={AlarmScreen} />
     </Drawer.Navigator>
   );
 }
