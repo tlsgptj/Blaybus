@@ -6,12 +6,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import Logo from "../assets/images/LOGO.svg";
-import MessageIcon from "../assets/images/message.svg";
-import LockIcon from "../assets/images/lock.svg";
-import { useNavigation } from "@react-navigation/native";
 
 // 목 데이터
 const mockUsers = [
@@ -54,11 +51,11 @@ export default function LoginPage() {
 
   return (
     <View style={styles.container}>
-      <Logo width={80} height={80} style={styles.logo} />
+      <Image source={require("../assets/images/LOGO.png")} style={{ width: 80, height: 80 }} />
 
       <Text style={styles.title}>로그인</Text>
       <View style={styles.inputContainer}>
-        <MessageIcon width={20} height={20} style={styles.icon} />
+      <Image source={require("../assets/images/message.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="아이디를 입력해주세요."
           value={username}
@@ -68,7 +65,7 @@ export default function LoginPage() {
       </View>
 
       <View style={styles.inputContainer}>
-        <LockIcon width={20} height={20} style={styles.icon} />
+      <Image source={require("../assets/images/lock.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="비밀번호를 입력해주세요."
           secureTextEntry
@@ -151,15 +148,17 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#000",
-    borderRadius: 10,
+    borderRadius: 20,
     paddingVertical: 15,
-    width: "150%",
+    width: "100%",
     alignItems: "center",
   },
   loginButtonDisabled: {
     backgroundColor: "#ccc",
   },
   loginButtonText: {
+    borderRadius: 20,
+    width: 80,
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
