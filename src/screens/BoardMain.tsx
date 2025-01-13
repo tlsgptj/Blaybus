@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import PostCard from "../components/post";
-import Ranking from "../components/ranking";
+import RankingItem from "../components/RankingItem";
+import axios from "axios";
 
 const dummyPostData = [
   {
@@ -110,7 +111,7 @@ function BoardMain() {
               data={rankingData}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <Ranking
+                <RankingItem
                   rank={item.rank}
                   name={item.name}
                   team={item.team}

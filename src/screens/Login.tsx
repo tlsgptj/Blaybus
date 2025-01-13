@@ -6,27 +6,19 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import Logo from "../assets/images/LOGO.svg";
-import MessageIcon from "../assets/images/message.svg";
-import LockIcon from "../assets/images/lock.svg";
-import { useNavigation } from "@react-navigation/native";
-
-// 목 데이터
-const mockUsers = [
-  { username: "1234", password: "password123" },
-  { username: "5678", password: "happy123" },
-];
+import axios from 'axios';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [employeeId, setemployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async () => {
-    if (!username || !password) {
+    if (!employeeId || !password) {
       Alert.alert("오류", "아이디와 비밀번호를 입력해주세요!");
       return;
     }
@@ -34,13 +26,13 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const user = mockUsers.find(
-        (user) => user.username === username && user.password === password
-      );
+      const response = await axios.post("/auth/login", {
+        employeeId : employeeId,
+        password: password,
+      });
 
-      if (user) {
-        Alert.alert("로그인 성공", `환영합니다!`);
-        //useNavigation.replace("/main"); 
+      if (response.data.success) {
+        Alert.alert("로그인 성공", `환영합니다!, ${response.data.user.name}`); 
       } else {
         Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
       }
@@ -54,21 +46,21 @@ export default function LoginPage() {
 
   return (
     <View style={styles.container}>
-      <Logo width={80} height={80} style={styles.logo} />
+      <Image source={require("../assets/images/LOGO.png")} style={{ width: 80, height: 80 }} />
 
       <Text style={styles.title}>로그인</Text>
       <View style={styles.inputContainer}>
-        <MessageIcon width={20} height={20} style={styles.icon} />
+      <Image source={require("../assets/images/message.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="아이디를 입력해주세요."
-          value={username}
-          onChangeText={setUsername}
+          value={employeeId}
+          onChangeText={setemployeeId}
           style={styles.textInput}
         />
       </View>
 
       <View style={styles.inputContainer}>
-        <LockIcon width={20} height={20} style={styles.icon} />
+      <Image source={require("../assets/images/lock.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="비밀번호를 입력해주세요."
           secureTextEntry
@@ -151,15 +143,17 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#000",
-    borderRadius: 10,
+    borderRadius: 20,
     paddingVertical: 15,
-    width: "150%",
+    width: "100%",
     alignItems: "center",
   },
   loginButtonDisabled: {
     backgroundColor: "#ccc",
   },
   loginButtonText: {
+    borderRadius: 20,
+    width: 80,
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",

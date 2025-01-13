@@ -8,50 +8,49 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  Image,
 } from "react-native";
-import { SvgProps } from "react-native-svg";
-//import Logo from "@/assets/images/LOGO.svg";
-//import LandingImport1 from "@/assets/images/landingImport1.svg";
-//import LandingImport2 from "@/assets/images/landingImport2.svg";
+import { useNavigation, NavigationProp, ParamListBase, NavigationContainer } from "@react-navigation/native";
+import LoginPage from "./Login";
+import { createStackNavigator } from "@react-navigation/stack";
 
 const { width } = Dimensions.get("window");
 
 type Slide = {
   id: string;
-  Svg: React.FC<SvgProps>;
+  image: any; 
   texts?: {
     text: string;
     fontSize: number;
     fontWeight?: "normal" | "bold";
   }[];
 };
-{/* 
-  const slides: Slide[] = [
-    {
-      id: "1",
-      Svg: Logo,
-    },
-    {
-      id: "2",
-      texts: [
+
+const slides: Slide[] = [
+  {
+    id: "1",
+    image: require("../assets/images/LOGO.png"), 
+  },
+  {
+    id: "2",
+    image: require("../assets/images/chart.png"), 
+    texts: [
       { text: "경험치와 즐거움", fontSize: 28, fontWeight: "bold" },
       { text: "경험치를 얻어 일 속에", fontSize: 20 },
       { text: "즐거움을 얻어보세요!", fontSize: 20 },
     ],
-    Svg: LandingImport1,
   },
   {
     id: "3",
+    image: require("../assets/images/glass.png"), 
     texts: [
       { text: "내 눈으로 직접", fontSize: 28, fontWeight: "bold" },
       { text: "확인하는 내 성과", fontSize: 28, fontWeight: "bold" },
       { text: "한 번의 클릭으로 내 성과를", fontSize: 20 },
       { text: "확인해보세요!", fontSize: 20 },
     ],
-    Svg: LandingImport2,
   },
 ];
-*/}
 
 export default function LandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,6 +58,17 @@ export default function LandingPage() {
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(index);
+  };
+
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const Stack = createStackNavigator();
+
+  const handleStart = () => {
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
   };
 
   return (
@@ -70,36 +80,26 @@ export default function LandingPage() {
         onScroll={handleScroll}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          const SvgComponent = item.Svg;
-          return (
-            <View style={[styles.slide, { width }]}>
-              <SvgComponent width={200} height={200} style={styles.image} />
-              {item.texts &&
-                item.texts.map((textItem, index) => (
-                  <Text
-                    key={index}
-                    style={[
-                      styles.text,
-                      {
-                        fontSize: textItem.fontSize,
-                        fontWeight: textItem.fontWeight || "normal",
-                      },
-                    ]}
-                  >
-                    {textItem.text}
-                  </Text>
-                ))}
-            </View>
-          );
-        }}
+        renderItem={({ item }) => (
+          <View style={[styles.slide, { width }]}>            
+            <Image source={item.image} style={styles.image} />
+            {item.texts &&
+              item.texts.map((textItem, index) => (
+                <Text
+                  key={index}
+                  style={[styles.text, { fontSize: textItem.fontSize, fontWeight: textItem.fontWeight || "normal" }]}
+                >
+                  {textItem.text}
+                </Text>
+              ))}
+          </View>
+        )}
       />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[
-            currentIndex === 2 ? styles.buttonEnabled : styles.buttonDisabled,
-          ]}
-          disabled={currentIndex !== 2}
+          style={currentIndex === slides.length - 1 ? styles.buttonEnabled : styles.buttonDisabled}
+          disabled={currentIndex !== slides.length - 1}
+          onPress={handleStart}
         >
           <Text style={styles.buttonText}>시작하기</Text>
         </TouchableOpacity>
@@ -120,6 +120,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   image: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
     marginBottom: 20,
   },
   text: {
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 50,
+    bottom: 80,
     width: "100%",
     alignItems: "center",
   },
