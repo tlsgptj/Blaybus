@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import PostCard from "../components/post";
 import RankingItem from "../components/RankingItem";
+import axios from "axios";
 
 const dummyPostData = [
   {

@@ -26,7 +26,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/employees", {
+      const response = await axios.post("/auth/login", {
         employeeId : employeeId,
         password: password,
       });
