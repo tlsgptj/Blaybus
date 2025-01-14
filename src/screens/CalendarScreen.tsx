@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
+  Image,
   Modal,
   ScrollView,
   StyleSheet,
@@ -9,7 +12,13 @@ import {
   View,
 } from "react-native";
 
-function CalendarScreen({ navigation }) {
+type MainDrawerParamList = {
+  alarm: undefined;
+};
+
+function CalendarScreen() {
+  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isMonthSelectorVisible, setMonthSelectorVisible] = useState(false);
 
@@ -20,29 +29,76 @@ function CalendarScreen({ navigation }) {
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
 
-  const tasks = [
-    {
-      id: "1",
-      date: "1월 6일",
-      title: "팀퀘스트",
-      description: "Lorem ipsum dolor sit amet.",
-      tag: "very good",
-    },
-    {
-      id: "2",
-      date: "1월 6일",
-      title: "리더퀘스트",
-      description: "Lorem ipsum dolor sit amet.",
-      tag: "good",
-    },
-    {
-      id: "3",
-      date: "1월 6일",
-      title: "활일",
-      description: "Lorem ipsum dolor sit amet.",
-      tag: "neutral",
-    },
-  ];
+  const [tasks, setTasks] = useState([]);
+
+  // 백엔드 임시 데이터
+  const fetchTasks = async () => {
+    const mockData = [
+      {
+        id: "1",
+        date: "2025-02-02",
+        title: "TF퀘스트",
+      },
+      {
+        id: "2",
+        date: "2025-02-02",
+        title: "팀퀘스트",
+      },
+      {
+        id: "3",
+        date: "2025-02-03",
+        title: "리더퀘스트",
+      },
+      {
+        id: "4",
+        date: "2025-02-03",
+        title: "할일",
+      },
+    ];
+    // 데이터 세팅
+    setTasks(mockData);
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const renderDayTasks = (day) => {
+    if (!day) return null;
+
+    const dateString = `${currentDate.getFullYear()}-${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+    const dayTasks = tasks.filter((task) => task.date === dateString);
+
+    return dayTasks.map((task, index) => (
+      <Text
+        key={index}
+        style={[styles.taskText, getTaskStyle(task.title)]}
+        numberOfLines={1}
+        ellipsizeMode="tail"
+      >
+        {task.title}
+      </Text>
+    ));
+  };
+
+  const getTaskStyle = (title) => {
+    switch (title) {
+      case "TF퀘스트":
+        return { color: "#808080" }; // 회색
+      case "팀퀘스트":
+        return { color: "#FF0000" }; // 빨간색
+      case "리더퀘스트":
+        return { color: "#FFD700" }; // 노란색
+      case "할일":
+        return { color: "#FFA500" }; // 주황색
+      default:
+        return { color: "#000000" }; // 기본 검정색
+    }
+  };
 
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
@@ -134,10 +190,18 @@ function CalendarScreen({ navigation }) {
       {/* header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text>뒤로로</Text>
+          <Image
+            source={require("../assets/images/mypage/leftarrow2.png")}
+            style={{ width: 20, height: 20 }}
+          />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>퀘스트</Text>
-        <TouchableOpacity><Text>알람</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("alarm")}>
+          <Image
+            source={require("../assets/images/mainpage/Bell.png")}
+            style={{ width: 20, height: 20 }}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* calendar Month */}
@@ -210,6 +274,9 @@ function CalendarScreen({ navigation }) {
                 <Text style={[styles.dayText, day === null && styles.emptyDay]}>
                   {day || ""}
                 </Text>
+                <View style={styles.tasksContainer}>
+                  {renderDayTasks(day) || ""}
+                </View>
               </TouchableOpacity>
             ))}
           </View>
@@ -297,7 +364,6 @@ function CalendarScreen({ navigation }) {
         위 스케줄은 고객님이 삭제하기 전까지 1년간 보관되며, 1년 뒤 내용 및
         스케줄은 자동 삭제 처리됩니다.
       </Text>
-      
     </View>
   );
 }
@@ -310,7 +376,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent:"space-between",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20,
   },
@@ -409,14 +475,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 5,
   },
+  tasksContainer: {
+    marginTop: 5,
+    alignItems: "flex-start",
+    width: "100%",
+    overflow: "hidden",
+  },
   day: {
     flex: 1,
-    height: 50,
-    justifyContent: "center",
+    height: 80,
+    justifyContent: "flex-start",
     alignItems: "center",
     borderRadius: 5,
     backgroundColor: "#f9f9f9",
     marginHorizontal: 2,
+    padding: 5,
+    overflow: "hidden",
   },
   dayText: {
     fontSize: 16,
@@ -511,6 +585,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 24,
     fontWeight: "bold",
+  },
+  taskText: {
+    fontSize: 12,
+    marginTop: 2,
+    maxWidth: "100%",
+    overflow: "hidden",
   },
 });
 

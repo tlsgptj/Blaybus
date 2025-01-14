@@ -66,7 +66,7 @@ function MyPage() {
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Text style={styles.arrow}>&lt;</Text>
+          <Image source={require("../assets/images/mypage/leftarrow2.png")} style={styles.arrow}/>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>마이페이지</Text>
       </View>

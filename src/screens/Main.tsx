@@ -61,7 +61,7 @@ function Main() {
               <Text style={styles.sectionTitle}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br /> 확인해보세요!
+                <br />확인해보세요!
               </Text>
             </View>
             <View style={styles.gridImgContainer}>
@@ -79,7 +79,7 @@ function Main() {
               <Text style={styles.sectionTitle}>랭킹</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br /> 확인해보세요!
+                <br />확인해보세요!
               </Text>
             </View>
             <View style={styles.gridImgContainer}>
@@ -97,7 +97,7 @@ function Main() {
               <Text style={styles.sectionTitle}>할일</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br /> 확인해보세요!
+                <br />확인해보세요!
               </Text>
             </View>
             <View style={styles.gridImgContainer}>
@@ -115,7 +115,7 @@ function Main() {
               <Text style={styles.sectionTitle}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br /> 확인해보세요!
+                <br />확인해보세요!
               </Text>
             </View>
             <View style={styles.gridImgContainer}>
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     marginTop: 16,
   },
   gridItem: {
