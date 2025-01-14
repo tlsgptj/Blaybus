@@ -1,3 +1,4 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
@@ -11,13 +12,18 @@ import {
   View,
 } from "react-native";
 
+type MainDrawerParamList = {
+  edit : undefined;
+}
+
 function MyPage() {
   const [isLevelDataModalOpen, setIsLevelDataModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigation = useNavigation();
+
+  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
 
   const levelData = [
     { level: "F1-I", experience: "0" },
@@ -53,25 +59,55 @@ function MyPage() {
     }
   };
 
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Text style={styles.arrow}>&lt;</Text>
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>마이페이지</Text>
       </View>
 
       <View style={styles.profileCard}>
-        <View style={styles.profileInfo}>
-          <Image style={styles.profileImage} />
-          <View style={styles.textInfo}>
-            <Text style={styles.profileName}>김민수님</Text>
-            <Text style={styles.profileSubtitle}>소속: 음성 14센터</Text>
-            <Text style={styles.profileSubtitle}>직무그룹 : 1</Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <View style={styles.profileInfo}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "0.5rem",
+                marginLeft: 5,
+              }}
+            >
+              <Image style={styles.nameDeco} />
+              <Text style={styles.profileName}>김민수님</Text>
+            </View>
+            <View style={styles.textInfo}>
+              <Text style={styles.profileSubtitle}>소속: 음성 14센터</Text>
+              <Text style={styles.profileSubtitle}>직무그룹 : 1</Text>
+            </View>
+          </View>
+          <View
+            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+          >
+            <View>
+              <Image style={styles.profileImage} />
+            </View>
+            <TouchableOpacity onPress={toggleModal} style={styles.badge}>
+              <Text style={styles.badgeText}>F1-I</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity onPress={toggleModal} style={styles.badge}>
-          <Text style={styles.badgeText}>F1-I</Text>
-        </TouchableOpacity>
       </View>
 
       {/* 레벨 정보 모달 */}
@@ -112,20 +148,20 @@ function MyPage() {
           </TouchableOpacity>
         </View>
         <View style={styles.infoRow}>
-          <Text>사번</Text>
-          <Text>2023010101</Text>
+          <Text style={styles.infoLabel}>사번</Text>
+          <Text style={styles.infoValue}>2023010101</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text>아이디</Text>
-          <Text>minsu.kim</Text>
+          <Text style={styles.infoLabel}>아이디</Text>
+          <Text style={styles.infoValue}>minsu.kim</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text>입사일</Text>
-          <Text>2023-01-01</Text>
+          <Text style={styles.infoLabel}>입사일</Text>
+          <Text style={styles.infoValue}>2023-01-01</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text>비밀번호호</Text>
-          <Text>****</Text>
+          <Text style={styles.infoLabel}>비밀번호</Text>
+          <Text style={styles.infoValue}>****</Text>
         </View>
       </View>
 
@@ -139,48 +175,76 @@ function MyPage() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>내 정보</Text>
-          
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>아이디</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="아이디를 입력해주세요"
-              value={id}
-              onChangeText={setId}
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>아이디</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="아이디를 입력해주세요"
+                value={id}
+                onChangeText={setId}
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>비밀번호</Text>
-            <TextInput 
-            style={styles.input}
-            placeholder="비밀번호를 입력해주세요."
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>비밀번호</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="비밀번호를 입력해주세요."
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
 
-          {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-          <View style={styles.buttonRow}>
-            <TouchableOpacity onPress={toggleEditModal} style={styles.cancelButton}>
-              <Text style={styles.buttonText}>취소</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleConfirm} style={styles.confirmButton}>
-              <Text style={styles.buttonText}>확인</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                onPress={toggleEditModal}
+                style={styles.cancelButton}
+              >
+                <Text style={styles.buttonText}>취소</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleConfirm}
+                style={styles.confirmButton}
+              >
+                <Text style={styles.buttonText}>확인</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>2024년 획득 경험치</Text>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+          }}
+        >
+          <View style={{display:"flex", flexDirection:"row", gap:"0.5rem"}}>
+            <View>
+              <Image
+                source={require("../assets/images/mypage/Chart_perspective_matte.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            </View>
+            <View>
+              <Text style={styles.cardTitle}>
+                2024년 <br />
+                획득 경험치
+              </Text>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.progressText}>3%</Text>
+          </View>
+        </View>
         <View style={styles.progressContainer}>
           <View style={styles.progressBar} />
-          <Text style={styles.progressText}>3%</Text>
         </View>
         <Text style={styles.progressInfo}>
           현재 획득: 2300 | 다음 목표: 15000
@@ -188,10 +252,34 @@ function MyPage() {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>2023년까지 누적 경험치</Text>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+          }}
+        >
+          <View style={{display:"flex", flexDirection:"row", gap:"0.5rem"}}>
+            <View>
+              <Image
+                source={require("../assets/images/mypage/Chart_perspective_matte.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            </View>
+            <View>
+              <Text style={styles.cardTitle}>
+                2023년까지 <br />
+                누적 경험치
+              </Text>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.progressText}>22%</Text>
+          </View>
+        </View>
+          
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, { width: "22%" }]} />
-          <Text style={styles.progressText}>22%</Text>
         </View>
         <Text style={styles.progressInfo}>
           누적 획득: 4000 | 다음 목표: 15000
@@ -223,11 +311,33 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    marginBottom: 20,
+    height: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#000",
+  },
+  backButton: {
+    position: "absolute",
+    left: 16,
+  },
+  arrow: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  nameDeco: {
+    width: 30,
+    height: 30,
+    borderRadius: 0,
+    backgroundColor: "#fff",
   },
   profileCard: {
     backgroundColor: "#333",
@@ -237,10 +347,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    width: "100%",
   },
   profileInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   profileImage: {
     width: 50,
@@ -254,11 +365,11 @@ const styles = StyleSheet.create({
   profileName: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 22,
   },
   profileSubtitle: {
     color: "#ccc",
-    fontSize: 12,
+    fontSize: 16,
   },
   badge: {
     backgroundColor: "#ff6b6b",
@@ -284,7 +395,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    
   },
   cardEdit: {
     color: "#007bff",
@@ -296,6 +407,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
+  },
+  infoLabel: {
+    fontSize: 14,
+    color: "#666",
+  },
+  infoValue: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
   },
   progressContainer: {
     flexDirection: "row",
@@ -311,7 +431,8 @@ const styles = StyleSheet.create({
   },
   progressText: {
     marginLeft: 10,
-    fontSize: 14,
+    fontSize: 25,
+    fontWeight:"bold",
   },
   progressInfo: {
     fontSize: 12,
