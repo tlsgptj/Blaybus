@@ -11,6 +11,7 @@ import CalendarScreen from "../../screens/CalendarScreen";
 import AlarmScreen from "../../screens/AlarmScreen";
 import PushAlramScreen from "../../screens/PushAlram";
 import LoginPage from "../../screens/Login";
+import PostCard from "../../screens/PostCardDetail/PostCardDetail";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,9 +20,10 @@ function MainDrawerNavigator() {
     <Drawer.Navigator>
       <Drawer.Screen name="MainPage" component={MainPage} />
       <Drawer.Screen name="MyPage" component={MyPage} />
-      <Drawer.Screen name="BoardMain" component={BoardMain} options={{drawerItemStyle: {display: "none"}}}/>
+      <Drawer.Screen name="BoardMain" component={BoardMain}/>
       <Drawer.Screen name="AllExperience" component={AllExperience} options={{drawerItemStyle: {display: "none"}}}/>
       <Drawer.Screen name="EditProfile" component={EditProfile} />
+      <Drawer.Screen name="PostCard" component={PostCard}/>
       <Drawer.Screen name="LoginPage" component={LoginPage}/>
       <Drawer.Screen name="LandingPage" component={LandingPage} />
       <Drawer.Screen name="CalendarScreen" component={CalendarScreen} options={{drawerItemStyle: {display: "none"}}}/>

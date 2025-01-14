@@ -66,7 +66,7 @@ const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
             <View>
-              <Text style={styles.sectionTitle}>전체 게시판</Text>
+              <Text style={styles.sectionTitle} onPress={() => navigation.navigate("BoardMain")}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br />확인해보세요!

@@ -7,6 +7,8 @@ export type RootStackParamList = {
   LoginPage: undefined;
   MainPage: undefined;
   LandingPage: undefined;
+  BoardMain: undefined;
+  PostCard: {postId: string};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

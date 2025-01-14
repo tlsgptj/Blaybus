@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import PostCard from "../components/post";
 import RankingItem from "../components/RankingItem";
 import axios from "axios";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "./App";
 
-function BoardMain() {
+type BoardScreenNavigationProp = StackNavigationProp<RootStackParamList, "BoardMain">;
+
+type BoardMainProps = {
+  navigation: BoardScreenNavigationProp;
+};
+
+const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("게시판");
   const [rankingData, setRankingData] = useState([]);
   const [postData, setPostData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePostPress = (id) => {
-    // detail 이동로직
+  const handlePostPress = (id: string) => {
+    navigation.navigate("PostCard", { postId: id });
   };
 
   const fetchRankingData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("/range");
+      const response = await axios.get("http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/exp");
       setRankingData(response.data);
     } catch (error) {
       console.error("Failed to fetch ranking data:", error);
@@ -29,15 +37,15 @@ function BoardMain() {
   const fetchPostData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("/board");
+      const response = await axios.get("http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/board");
       if (response.data.status === 0) {
-        const formattedData = response.data.data.map((item, index) => ({
-          id: index.toString(), 
+        const formattedData = response.data.data.map((item: any, index: number) => ({
+          id: index.toString(),
           title: item.title,
           content: item.contents,
-          category: "기타", 
-          isNew: false, 
-          isChecked: false 
+          category: "기타",
+          isNew: false,
+          isChecked: false,
         }));
         setPostData(formattedData);
       } else {
@@ -75,7 +83,9 @@ function BoardMain() {
         </TouchableOpacity>
       </View>
 
-      {activeTab === "게시판" ? (
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+      ) : activeTab === "게시판" ? (
         <FlatList
           data={postData}
           keyExtractor={(item) => item.id}
@@ -91,31 +101,22 @@ function BoardMain() {
           )}
         />
       ) : (
-        <View>
-          <View style={styles.rankingHeader}>
-            <Text style={styles.rankingText}>실시간으로 확인하는 나의 퀘스트</Text>
-          </View>
-          {isLoading ? (
-            <Text style={{ textAlign: "center", marginTop: 20 }}>로딩 중...</Text>
-          ) : (
-            <FlatList
-              data={rankingData}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <RankingItem
-                  rank={item.rank}
-                  name={item.name}
-                  team={item.team}
-                  progress={item.progress}
-                />
-              )}
+        <FlatList
+          data={rankingData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <RankingItem
+              rank={item.rank}
+              name={item.name}
+              team={item.team}
+              progress={item.progress}
             />
           )}
-        </View>
+        />
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
   activeTab: { borderBottomWidth: 2, borderBottomColor: "#000" },
   tabText: { fontSize: 16, color: "#888" },
   activeTabText: { color: "#000", fontWeight: "bold" },
+  loader: { flex: 1, justifyContent: "center", alignItems: "center" },
   rankingHeader: { backgroundColor: "#f5f5f5", padding: 20, alignItems: "center" },
   rankingText: { fontSize: 16, fontWeight: "bold" },
 });

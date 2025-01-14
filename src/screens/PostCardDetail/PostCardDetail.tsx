@@ -8,7 +8,7 @@ export default function PostCardDetail() {
 
   return (
     <View style={styles.container}>
-      <Image source={require('@/assets/images/arrow2.png')}
+      <Image source={require('../../assets/images/arrow2.png')}
         style={{width : 10,
                 height: 10,
                 marginRight: 4}}/>
@@ -17,13 +17,13 @@ export default function PostCardDetail() {
       <Text style={styles.title}>게시글 상세 페이지</Text>
       <Text style={styles.content}>게시글 ID: {id}</Text>
 
-      <Image source={require('@/assets/images/heart.png')}
+      <Image source={require('../../assets/images/heart.png')}
         style={{width: 10,
                 height: 10,
                 marginRight: 4}}/>
 
       <Text style={styles.like}>300</Text>
-      <Image source={require('@/assets/images/eyes.png')}
+      <Image source={require('../../assets/images/eyes.png')}
         style={{width : 10,
                 height: 10,
                 marginRight: 4}}/>
