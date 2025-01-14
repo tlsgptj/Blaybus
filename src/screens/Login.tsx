@@ -10,8 +10,17 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../App";
 
-export default function LoginPage() {
+type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+
+interface LoginPageProps {
+  navigation: LoginPageNavigationProp;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
   const [employeeId, setemployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -31,14 +40,24 @@ export default function LoginPage() {
         password: password,
       });
 
+
       if (response.data.success) {
-        Alert.alert("로그인 성공", `환영합니다!, ${response.data.user.name}`); 
+        const { accessToken, refreshToken } = response.data;
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+        const storedAccessToken = await AsyncStorage.getItem("accessToken");
+        const storedRefreshToken = await AsyncStorage.getItem("refreshToken");
+        console.log("Stored Access Token:", storedAccessToken);
+        console.log("Stored Refresh Token:", storedRefreshToken);
+        window.alert(accessToken)
+        window.alert(refreshToken)
+        window.alert("로그인 성공 : `환영합니다!, ${response.data.user.name}`"); 
       } else {
-        Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
+        window.alert("로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (error) {
       console.error("로그인 오류:", error);
-      Alert.alert("오류", "예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
+      window.alert("오류 : 예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -159,3 +178,5 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
+
+export default LoginPage;
