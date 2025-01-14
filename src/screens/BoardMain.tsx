@@ -4,58 +4,47 @@ import PostCard from "../components/post";
 import RankingItem from "../components/RankingItem";
 import axios from "axios";
 
-const dummyPostData = [
-  {
-    id: "1",
-    category: "인사팀",
-    title: "속보 회사 휴가 10일",
-    content: "Lorem ipsum dolor sit amet",
-    isNew: false,
-    isChecked: false,
-  },
-  {
-    id: "2",
-    category: "IT부서",
-    title: "속보 회사 휴가 10일",
-    content: "Lorem ipsum dolor sit amet",
-    isNew: true,
-    isChecked: true,
-  },
-  {
-    id: "3",
-    category: "기획부",
-    title: "속보 회사 휴가 10일",
-    content: "Lorem ipsum dolor sit amet",
-    isNew: false,
-    isChecked: false,
-  },
-];
-
 function BoardMain() {
   const [activeTab, setActiveTab] = useState("게시판");
   const [rankingData, setRankingData] = useState([]);
+  const [postData, setPostData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePostPress = (id : string) => {
-    ///detail 이동로직
-  }
+  const handlePostPress = (id) => {
+    // detail 이동로직
+  };
 
   const fetchRankingData = async () => {
     setIsLoading(true);
     try {
-      const fetchedData: { id: string; name: string; team: string; rank: number; progress: number }[] = await new Promise((resolve) =>
-        setTimeout(() => resolve([
-          { id: "1", name: "김지수", team: "사업기획팀", rank: 1, progress: 90 },
-          { id: "2", name: "김지수", team: "사업기획팀", rank: 2, progress: 80 },
-          { id: "3", name: "김지수", team: "사업기획팀", rank: 3, progress: 70 },
-          { id: "4", name: "김지수", team: "사업기획팀", rank: 4, progress: 60 },
-          { id: "5", name: "김지수", team: "사업기획팀", rank: 5, progress: 50 },
-        ]), 1000)
-      );
-
-      setRankingData(fetchedData);
+      const response = await axios.get("/sheets/range");
+      setRankingData(response.data);
     } catch (error) {
       console.error("Failed to fetch ranking data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchPostData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get("/board");
+      if (response.data.status === 0) {
+        const formattedData = response.data.data.map((item, index) => ({
+          id: index.toString(), 
+          title: item.title,
+          content: item.contents,
+          category: "기타", 
+          isNew: false, 
+          isChecked: false 
+        }));
+        setPostData(formattedData);
+      } else {
+        console.error("Failed to fetch post data:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Failed to fetch post data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -64,6 +53,8 @@ function BoardMain() {
   useEffect(() => {
     if (activeTab === "랭킹") {
       fetchRankingData();
+    } else if (activeTab === "게시판") {
+      fetchPostData();
     }
   }, [activeTab]);
 
@@ -86,7 +77,7 @@ function BoardMain() {
 
       {activeTab === "게시판" ? (
         <FlatList
-          data={dummyPostData}
+          data={postData}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <PostCard
