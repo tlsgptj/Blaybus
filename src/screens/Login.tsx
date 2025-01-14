@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
 
-type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "LoginPage">;
 
 interface LoginPageProps {
   navigation: LoginPageNavigationProp;
@@ -35,29 +35,33 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/auth/login", {
-        employeeId : employeeId,
-        password: password,
-      });
+      const response = await axios.post(
+        "http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/auth/login",
+        { employeeId, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
+      console.log(response.data);
 
       if (response.data.success) {
         const { accessToken, refreshToken } = response.data;
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
+
         const storedAccessToken = await AsyncStorage.getItem("accessToken");
         const storedRefreshToken = await AsyncStorage.getItem("refreshToken");
         console.log("Stored Access Token:", storedAccessToken);
         console.log("Stored Refresh Token:", storedRefreshToken);
-        window.alert(accessToken)
-        window.alert(refreshToken)
-        window.alert("로그인 성공 : `환영합니다!, ${response.data.user.name}`"); 
+
+        Alert.alert("로그인 성공", `환영합니다, ${response.data.user.name}`);
+        // 필요한 경우 다음 화면으로 이동
+         navigation.navigate("MainPage");
       } else {
-        window.alert("로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.");
+        Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (error) {
-      console.error("로그인 오류:", error);
-      window.alert("오류 : 예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("로그인 오류:", error.response?.data || error.message);
+      Alert.alert("오류", "예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +73,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
       <Text style={styles.title}>로그인</Text>
       <View style={styles.inputContainer}>
-      <Image source={require("../assets/images/message.png")} style={{ width: 20, height: 20 }} />
+        <Image source={require("../assets/images/message.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="아이디를 입력해주세요."
           value={employeeId}
@@ -79,7 +83,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
       </View>
 
       <View style={styles.inputContainer}>
-      <Image source={require("../assets/images/lock.png")} style={{ width: 20, height: 20 }} />
+        <Image source={require("../assets/images/lock.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="비밀번호를 입력해주세요."
           secureTextEntry
@@ -114,7 +118,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -142,9 +146,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: "100%",
   },
-  icon: {
-    marginRight: 10,
-  },
   textInput: {
     flex: 1,
     fontSize: 16,
@@ -171,8 +172,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
   },
   loginButtonText: {
-    borderRadius: 20,
-    width: 80,
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",

@@ -1,17 +1,8 @@
-import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
 
-type MainDrawerParamList = {
-  board : undefined;
-  calendar: undefined;
-  experience : undefined;
-}
-
 function Main() {
-  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
   return (
     <ScrollView style={styles.container}>
       <View
@@ -66,13 +57,13 @@ function Main() {
       <View style={styles.gridContainer}>
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
-            <TouchableOpacity onPress={() =>navigation.navigate("board")}>
+            <View>
               <Text style={styles.sectionTitle}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br /> 확인해보세요!
               </Text>
-            </TouchableOpacity>
+            </View>
             <View style={styles.gridImgContainer}>
               <Image
                 source={require("../assets/images/mainpage/note.png")}
@@ -120,13 +111,13 @@ function Main() {
 
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
-            <TouchableOpacity onPress={()=> navigation.navigate("calendar")}>
-              <Text style={styles.sectionTitle}>캘린더</Text>
+            <View>
+              <Text style={styles.sectionTitle}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br /> 확인해보세요!
               </Text>
-            </TouchableOpacity>
+            </View>
             <View style={styles.gridImgContainer}>
               <Image
                 source={require("../assets/images/mainpage/calendar.png")}
@@ -179,7 +170,7 @@ function Main() {
               한눈에 나의 성과를 확인해보세요!
             </Text>
           </View>
-          <TouchableOpacity onPress={()=> navigation.navigate("experience")}>
+          <TouchableOpacity>
             <Text style={styles.moreText}>더보기 &gt;</Text>
           </TouchableOpacity>
         </View>
