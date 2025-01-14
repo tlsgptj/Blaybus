@@ -11,6 +11,7 @@ import LandingPage from "../../screens/Landing";
 import { NavigationContainer } from "@react-navigation/native";
 import CalendarScreen from "../../screens/CalendarScreen";
 import AlarmScreen from "../../screens/AlarmScreen";
+import PushAlramScreen from "../../screens/PushAlram";
 
 const Drawer = createDrawerNavigator();
 
@@ -26,6 +27,7 @@ function MainDrawerNavigator() {
       <Drawer.Screen name="landing" component={LandingPage} />
       <Drawer.Screen name="calendar" component={CalendarScreen} />
       <Drawer.Screen name="alarm" component={AlarmScreen} />
+      <Drawer.Screen name="PushAlram" component={PushAlramScreen}/>
     </Drawer.Navigator>
   );
 }

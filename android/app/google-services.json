@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "391720257981",
+    "project_id": "blaybus-10c93",
+    "storage_bucket": "blaybus-10c93.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391720257981:android:f38fcf967d1e32d486ead4",
+        "android_client_info": {
+          "package_name": "com.anonymous.RN_Project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCWLY4AwyudiLgY0vu4T5HoMnmNoDm02o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
