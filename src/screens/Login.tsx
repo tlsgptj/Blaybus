@@ -6,47 +6,61 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import Logo from "../assets/images/LOGO.svg";
-import MessageIcon from "../assets/images/message.svg";
-import LockIcon from "../assets/images/lock.svg";
-import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "./App";
 
-// 목 데이터
-const mockUsers = [
-  { username: "1234", password: "password123" },
-  { username: "5678", password: "happy123" },
-];
+type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "LoginPage">;
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
+interface LoginPageProps {
+  navigation: LoginPageNavigationProp;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
+  const [employeeId, setemployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert("오류", "아이디와 비밀번호를 입력해주세요!");
+    if (!employeeId || !password) {
+      window.alert("오류 : 아이디와 비밀번호를 입력해주세요!");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const user = mockUsers.find(
-        (user) => user.username === username && user.password === password
+      const response = await axios.post(
+        "http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/auth/login",
+        { employeeId, password },
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      if (user) {
-        Alert.alert("로그인 성공", `환영합니다!`);
-        useNavigation.replace("/main"); 
+      console.log(response.data);
+
+      if (response.data) {
+        const { accessToken, refreshToken } = response.data;
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+
+        const storedAccessToken = await AsyncStorage.getItem("accessToken");
+        const storedRefreshToken = await AsyncStorage.getItem("refreshToken");
+        console.log("Stored Access Token:", storedAccessToken);
+        console.log("Stored Refresh Token:", storedRefreshToken);
+
+        window.alert("로그인 성공");
+         navigation.navigate("MainPage");
       } else {
-        Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
+        window.alert("로그인 실패 : 아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (error) {
-      console.error("로그인 오류:", error);
-      Alert.alert("오류", "예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("로그인 오류:", error.response?.data || error.message);
+      window.alert("오류 : 예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -54,21 +68,21 @@ export default function LoginPage() {
 
   return (
     <View style={styles.container}>
-      <Logo width={80} height={80} style={styles.logo} />
+      <Image source={require("../assets/images/LOGO.png")} style={{ width: 80, height: 80 }} />
 
       <Text style={styles.title}>로그인</Text>
       <View style={styles.inputContainer}>
-        <MessageIcon width={20} height={20} style={styles.icon} />
+        <Image source={require("../assets/images/message.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="아이디를 입력해주세요."
-          value={username}
-          onChangeText={setUsername}
+          value={employeeId}
+          onChangeText={setemployeeId}
           style={styles.textInput}
         />
       </View>
 
       <View style={styles.inputContainer}>
-        <LockIcon width={20} height={20} style={styles.icon} />
+        <Image source={require("../assets/images/lock.png")} style={{ width: 20, height: 20 }} />
         <TextInput
           placeholder="비밀번호를 입력해주세요."
           secureTextEntry
@@ -103,7 +117,7 @@ export default function LoginPage() {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -131,9 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: "100%",
   },
-  icon: {
-    marginRight: 10,
-  },
   textInput: {
     flex: 1,
     fontSize: 16,
@@ -151,9 +162,9 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#000",
-    borderRadius: 10,
+    borderRadius: 20,
     paddingVertical: 15,
-    width: "150%",
+    width: "100%",
     alignItems: "center",
   },
   loginButtonDisabled: {
@@ -165,3 +176,5 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
+
+export default LoginPage;

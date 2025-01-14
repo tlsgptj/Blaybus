@@ -12,14 +12,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "notification": {
+      "vapidPublicKey": "BJ7Gu48VqTmJN-_ZZm76n2vhb9UXX5x-JKCS4VwMI0q0yV8ZbejOJFUEAFmmEuAJB3A7Fb6cmDwpMoSYAnmlUIY"
+    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#ffffff",
+        "googleServicesFile": "./google-services.json"
+      },
+      "package": "com.anonymous.RN_Project"
     },
     "web": {
       "favicon": "./assets/favicon.png"

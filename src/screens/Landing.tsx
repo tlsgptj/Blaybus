@@ -6,19 +6,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  Image,
 } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-import Logo from "@/assets/images/LOGO.svg";
-import LandingImport1 from "@/assets/images/landingImport1.svg";
-import LandingImport2 from "@/assets/images/landingImport2.svg";
-import Login from "../screens/Login";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "./App";
 
 const { width } = Dimensions.get("window");
 
 type Slide = {
   id: string;
-  Svg: React.FC<any>;
+  image: any; 
   texts?: {
     text: string;
     fontSize: number;
@@ -29,35 +28,45 @@ type Slide = {
 const slides: Slide[] = [
   {
     id: "1",
-    Svg: Logo,
+    image: require("../assets/images/LOGO.png"), 
   },
   {
     id: "2",
+    image: require("../assets/images/chart.png"), 
     texts: [
       { text: "경험치와 즐거움", fontSize: 28, fontWeight: "bold" },
       { text: "경험치를 얻어 일 속에", fontSize: 20 },
       { text: "즐거움을 얻어보세요!", fontSize: 20 },
     ],
-    Svg: LandingImport1,
   },
   {
     id: "3",
+    image: require("../assets/images/glass.png"), 
     texts: [
       { text: "내 눈으로 직접", fontSize: 28, fontWeight: "bold" },
       { text: "확인하는 내 성과", fontSize: 28, fontWeight: "bold" },
       { text: "한 번의 클릭으로 내 성과를", fontSize: 20 },
       { text: "확인해보세요!", fontSize: 20 },
     ],
-    Svg: LandingImport2,
   },
 ];
 
-function LandingPage({ navigation }: any) {
+type LandingScreenNavigationProp = StackNavigationProp<RootStackParamList, "LandingPage">;
+
+type Props = {
+  navigation: LandingScreenNavigationProp;
+};
+
+const LandingPage: React.FC<Props> = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(index);
+  };
+
+  const handleStart = () => {
+    navigation.navigate("LoginPage");
   };
 
   return (
@@ -70,19 +79,13 @@ function LandingPage({ navigation }: any) {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={[styles.slide, { width }]}>
-            <item.Svg width={200} height={200} style={styles.image} />
+          <View style={[styles.slide, { width }]}>            
+            <Image source={item.image} style={styles.image} />
             {item.texts &&
               item.texts.map((textItem, index) => (
                 <Text
                   key={index}
-                  style={[
-                    styles.text,
-                    {
-                      fontSize: textItem.fontSize,
-                      fontWeight: textItem.fontWeight || "normal",
-                    },
-                  ]}
+                  style={[styles.text, { fontSize: textItem.fontSize, fontWeight: textItem.fontWeight || "normal" }]}
                 >
                   {textItem.text}
                 </Text>
@@ -92,11 +95,9 @@ function LandingPage({ navigation }: any) {
       />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[
-            currentIndex === 2 ? styles.buttonEnabled : styles.buttonDisabled,
-          ]}
-          onPress={() => navigation.navigate("Login")}
-          disabled={currentIndex !== 2}
+          style={currentIndex === slides.length - 1 ? styles.buttonEnabled : styles.buttonDisabled}
+          disabled={currentIndex !== slides.length - 1}
+          onPress={handleStart}
         >
           <Text style={styles.buttonText}>시작하기</Text>
         </TouchableOpacity>
@@ -105,35 +106,21 @@ function LandingPage({ navigation }: any) {
   );
 }
 
-const Stack = createStackNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="LandingPage"
-          component={LandingPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Login" component={Login} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex :1,
     backgroundColor: "#fff",
   },
   slide: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
+    marginTop: 100,
   },
   image: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
     marginBottom: 20,
   },
   text: {
@@ -161,9 +148,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 50,
+    bottom: 80,
     width: "100%",
     alignItems: "center",
   },
 });
 
+export default LandingPage;
