@@ -1,8 +1,16 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "./App";
 
-function Main() {
+type MainPageNavigationProp = StackNavigationProp<RootStackParamList, "MainPage">;
+
+interface MainPageProps {
+  navigation: MainPageNavigationProp;
+}
+
+const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View
@@ -383,4 +391,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Main;
+export default MainPage;

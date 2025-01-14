@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Main from "../../screens/Main";
+import MainPage from "../../screens/Main";
 import MyPage from "../../screens/MyPage";
 import BoardMain from "../../screens/BoardMain";
 import AllExperience from "../../screens/AllExperience";
@@ -10,21 +10,23 @@ import LandingPage from "../../screens/Landing";
 import CalendarScreen from "../../screens/CalendarScreen";
 import AlarmScreen from "../../screens/AlarmScreen";
 import PushAlramScreen from "../../screens/PushAlram";
+import LoginPage from "../../screens/Login";
 
 const Drawer = createDrawerNavigator();
 
 function MainDrawerNavigator() {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="main" component={Main} />
-      <Drawer.Screen name="mypage" component={MyPage} />
-      <Drawer.Screen name="board" component={BoardMain} options={{drawerItemStyle: {display: "none"}}}/>
-      <Drawer.Screen name="experience" component={AllExperience} options={{drawerItemStyle: {display: "none"}}}/>
-      <Drawer.Screen name="edit" component={EditProfile} />
-      <Drawer.Screen name="landing" component={LandingPage} />
-      <Drawer.Screen name="calendar" component={CalendarScreen} options={{drawerItemStyle: {display: "none"}}}/>
-      <Drawer.Screen name="alarm" component={AlarmScreen} />
-      <Drawer.Screen name="PushAlram" component={PushAlramScreen}/>
+      <Drawer.Screen name="MainPage" component={MainPage} />
+      <Drawer.Screen name="MyPage" component={MyPage} />
+      <Drawer.Screen name="BoardMain" component={BoardMain} options={{drawerItemStyle: {display: "none"}}}/>
+      <Drawer.Screen name="AllExperience" component={AllExperience} options={{drawerItemStyle: {display: "none"}}}/>
+      <Drawer.Screen name="EditProfile" component={EditProfile} />
+      <Drawer.Screen name="LoginPage" component={LoginPage}/>
+      <Drawer.Screen name="LandingPage" component={LandingPage} />
+      <Drawer.Screen name="CalendarScreen" component={CalendarScreen} options={{drawerItemStyle: {display: "none"}}}/>
+      <Drawer.Screen name="AlarmScreen" component={AlarmScreen} />
+      <Drawer.Screen name="PushAlramScreen" component={PushAlramScreen}/>
     </Drawer.Navigator>
   );
 }

@@ -12,7 +12,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../App";
+import { RootStackParamList } from "./App";
 
 type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "LoginPage">;
 
@@ -28,7 +28,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
   const handleLogin = async () => {
     if (!employeeId || !password) {
-      Alert.alert("오류", "아이디와 비밀번호를 입력해주세요!");
+      window.alert("오류 : 아이디와 비밀번호를 입력해주세요!");
       return;
     }
 
@@ -43,7 +43,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
       console.log(response.data);
 
-      if (response.data.success) {
+      if (response.data) {
         const { accessToken, refreshToken } = response.data;
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
@@ -53,15 +53,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
         console.log("Stored Access Token:", storedAccessToken);
         console.log("Stored Refresh Token:", storedRefreshToken);
 
-        Alert.alert("로그인 성공", `환영합니다, ${response.data.user.name}`);
-        // 필요한 경우 다음 화면으로 이동
+        window.alert("로그인 성공");
          navigation.navigate("MainPage");
       } else {
-        Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
+        window.alert("로그인 실패 : 아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (error) {
       console.error("로그인 오류:", error.response?.data || error.message);
-      Alert.alert("오류", "예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
+      window.alert("오류 : 예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }

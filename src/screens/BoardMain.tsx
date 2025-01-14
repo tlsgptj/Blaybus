@@ -17,7 +17,7 @@ function BoardMain() {
   const fetchRankingData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("/sheets/range");
+      const response = await axios.get("/range");
       setRankingData(response.data);
     } catch (error) {
       console.error("Failed to fetch ranking data:", error);

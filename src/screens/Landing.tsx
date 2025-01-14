@@ -10,9 +10,8 @@ import {
   NativeScrollEvent,
   Image,
 } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../App";
+import { RootStackParamList } from "./App";
 
 const { width } = Dimensions.get("window");
 
@@ -52,21 +51,19 @@ const slides: Slide[] = [
   },
 ];
 
-type LandingPageNavigationProp = StackNavigationProp<RootStackParamList, "LandingPage">;
+type LandingScreenNavigationProp = StackNavigationProp<RootStackParamList, "LandingPage">;
 
-interface LandingPageProps {
-  navigation: LandingPageNavigationProp;
-}
+type Props = {
+  navigation: LandingScreenNavigationProp;
+};
 
-const LandingPage: React.FC<LandingPageProps> = ({ navigation }) => {
+const LandingPage: React.FC<Props> = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(index);
   };
-
-  const Stack = createStackNavigator();
 
   const handleStart = () => {
     navigation.navigate("LoginPage");
@@ -111,14 +108,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex :1,
     backgroundColor: "#fff",
   },
   slide: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
+    marginTop: 100,
   },
   image: {
     width: 200,
