@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
 
@@ -39,7 +40,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
         password: password,
       });
 
+
       if (response.data.success) {
+        const { accessToken, refreshToken } = response.data;
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
         window.alert("로그인 성공 : `환영합니다!, ${response.data.user.name}`"); 
       } else {
         window.alert("로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.");
