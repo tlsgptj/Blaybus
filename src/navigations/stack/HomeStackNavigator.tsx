@@ -5,6 +5,8 @@ import AllExperience from "../../screens/AllExperience";
 
 export type HomeStackParamList = {
   AllExperience: undefined;
+  Post : undefined;
+  Calendar : undefined;
 };
 
 const Stack = createStackNavigator<HomeStackParamList>();
