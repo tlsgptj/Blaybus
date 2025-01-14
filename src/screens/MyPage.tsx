@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 type MainDrawerParamList = {
-  edit : undefined;
+  EditProfile : undefined;
 }
 
 function MyPage() {
@@ -53,7 +53,7 @@ function MyPage() {
   const handleConfirm = () => {
     if (id === userData.id && password === userData.password) {
       toggleEditModal();
-      navigation.navigate("edit");
+      navigation.navigate("EditProfile");
     } else {
       setError("아이디 또는 비밀번호가 잘못되었습니다.");
     }

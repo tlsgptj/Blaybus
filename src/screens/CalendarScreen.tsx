@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 type MainDrawerParamList = {
-  alarm: undefined;
+  AlarmScreen: undefined;
 };
 
 function CalendarScreen() {
@@ -196,7 +196,7 @@ function CalendarScreen() {
           />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>퀘스트</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("alarm")}>
+        <TouchableOpacity onPress={() => navigation.navigate("AlarmScreen")}>
           <Image
             source={require("../assets/images/mainpage/Bell.png")}
             style={{ width: 20, height: 20 }}
