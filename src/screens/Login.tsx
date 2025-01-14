@@ -45,6 +45,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
         const { accessToken, refreshToken } = response.data;
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
+        const storedAccessToken = await AsyncStorage.getItem("accessToken");
+        const storedRefreshToken = await AsyncStorage.getItem("refreshToken");
+        console.log("Stored Access Token:", storedAccessToken);
+        console.log("Stored Refresh Token:", storedRefreshToken);
+        window.alert(accessToken)
+        window.alert(refreshToken)
         window.alert("로그인 성공 : `환영합니다!, ${response.data.user.name}`"); 
       } else {
         window.alert("로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.");
