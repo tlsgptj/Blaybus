@@ -1,5 +1,8 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -7,7 +10,13 @@ import {
   View,
 } from "react-native";
 
-function AlarmScreen({ navogation }) {
+type MainDrawerParamList = {
+  calendar: undefined;
+};
+
+function AlarmScreen() {
+  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
+
   const alarms = [
     {
       id: "1",
@@ -37,10 +46,16 @@ function AlarmScreen({ navogation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navogation.goBack()}>
-          <Text>뒤로</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("calendar")}>
+          <Image
+            source={require("../assets/images/mypage/leftarrow2.png")}
+            style={{ width: 20, height: 20 }}
+          />
         </TouchableOpacity>
-        <Text>알림</Text>
+        <Image
+          source={require("../assets/images/mainpage/Bell.png")}
+          style={{ width: 20, height: 20 }}
+        />
       </View>
 
       <ScrollView style={styles.alarmList}>
@@ -82,7 +97,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ddd",
-    
   },
   alarmTitle: {
     fontSize: 16,
