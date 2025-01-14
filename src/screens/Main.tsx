@@ -1,16 +1,22 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "./App";
 
-type MainPageNavigationProp = StackNavigationProp<RootStackParamList, "MainPage">;
-
-interface MainPageProps {
-  navigation: MainPageNavigationProp;
+type MainDrawerParamList = {
+  BoardMain :undefined;
+  CalendarScreen : undefined;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
+function Main() {
+  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>()
+ 
+  useEffect(() => {
+
+    console.log("Navigating to MainPage");
+    console.log(navigation.getState());
+  }, [navigation])
   return (
     <ScrollView style={styles.container}>
       <View
@@ -65,13 +71,13 @@ const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
       <View style={styles.gridContainer}>
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
-            <View>
-              <Text style={styles.sectionTitle} onPress={() => navigation.navigate("BoardMain")}>전체 게시판</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('BoardMain')}>
+              <Text style={styles.sectionTitle}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br />확인해보세요!
               </Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.gridImgContainer}>
               <Image
                 source={require("../assets/images/mainpage/note.png")}
@@ -83,13 +89,13 @@ const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
 
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
-            <View>
+            <TouchableOpacity onPress={() => navigation.navigate("BoardMain")}>
               <Text style={styles.sectionTitle}>랭킹</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br />확인해보세요!
               </Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.gridImgContainer}>
               <Image
                 source={require("../assets/images/mainpage/fire.png")}
@@ -101,13 +107,13 @@ const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
 
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
-            <View>
+            <TouchableOpacity onPress={() => navigation.navigate("CalendarScreen")}>
               <Text style={styles.sectionTitle}>할일</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br />확인해보세요!
               </Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.gridImgContainer}>
               <Image
                 source={require("../assets/images/mainpage/briefcase.png")}
@@ -119,13 +125,13 @@ const MainPage: React.FC<MainPageProps> = ({ navigation }) => {
 
         <View style={styles.gridItem}>
           <View style={styles.gridItemContainer}>
-            <View>
-              <Text style={styles.sectionTitle}>전체 게시판</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("CalendarScreen")}>
+              <Text style={styles.sectionTitle}>캘린더</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
                 <br />확인해보세요!
               </Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.gridImgContainer}>
               <Image
                 source={require("../assets/images/mainpage/calendar.png")}
@@ -391,4 +397,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainPage;
+export default Main;

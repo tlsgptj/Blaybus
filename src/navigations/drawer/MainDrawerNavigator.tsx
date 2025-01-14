@@ -17,16 +17,16 @@ const Drawer = createDrawerNavigator();
 
 function MainDrawerNavigator() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator initialRouteName="MainPage">
       <Drawer.Screen name="MainPage" component={MainPage} />
       <Drawer.Screen name="MyPage" component={MyPage} />
       <Drawer.Screen name="BoardMain" component={BoardMain}/>
-      <Drawer.Screen name="AllExperience" component={AllExperience} options={{drawerItemStyle: {display: "none"}}}/>
+      <Drawer.Screen name="AllExperience" component={AllExperience} />
       <Drawer.Screen name="EditProfile" component={EditProfile} />
       <Drawer.Screen name="PostCard" component={PostCard}/>
       <Drawer.Screen name="LoginPage" component={LoginPage}/>
       <Drawer.Screen name="LandingPage" component={LandingPage} />
-      <Drawer.Screen name="CalendarScreen" component={CalendarScreen} options={{drawerItemStyle: {display: "none"}}}/>
+      <Drawer.Screen name="CalendarScreen" component={CalendarScreen} />
       <Drawer.Screen name="AlarmScreen" component={AlarmScreen} />
       <Drawer.Screen name="PushAlramScreen" component={PushAlramScreen}/>
     </Drawer.Navigator>

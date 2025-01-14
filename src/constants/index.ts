@@ -1,9 +1,10 @@
 const authNavigations = {
     LOGIN: 'Login',
+    LANDING : 'LandingPage',
+    MAIN : 'MainPage',
+    BOARD : 'BoardMain',
 } as const;
 
-const homeNavigatons = {
-    ALLEXPERIENCE : 'allexperience'
-} as const
 
-export {authNavigations, homeNavigatons}
+
+export {authNavigations}

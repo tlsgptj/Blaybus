@@ -6,25 +6,25 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  Image
+  Image,
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import axios from 'axios';
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "./App";
+import { useNavigation } from "@react-navigation/native";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 
-type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "LoginPage">;
+type MainDrawerParamList = {
+  MainPage: undefined;
+};
 
-interface LoginPageProps {
-  navigation: LoginPageNavigationProp;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
+const LoginPage: React.FC = () => {
   const [employeeId, setemployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
 
   const handleLogin = async () => {
     if (!employeeId || !password) {
@@ -54,13 +54,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
         console.log("Stored Refresh Token:", storedRefreshToken);
 
         window.alert("로그인 성공");
-         navigation.navigate("MainPage");
+        navigation.navigate("MainPage");
       } else {
         window.alert("로그인 실패 : 아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (error) {
       console.error("로그인 오류:", error.response?.data || error.message);
-      window.alert("오류 : 예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
+      window.alert(
+        "오류 : 예기치 않은 오류가 발생했습니다. 다시 시도해주세요."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -68,11 +70,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={require("../assets/images/LOGO.png")} style={{ width: 80, height: 80 }} />
+      <Image
+        source={require("../assets/images/LOGO.png")}
+        style={{ width: 80, height: 80 }}
+      />
 
       <Text style={styles.title}>로그인</Text>
       <View style={styles.inputContainer}>
-        <Image source={require("../assets/images/message.png")} style={{ width: 20, height: 20 }} />
+        <Image
+          source={require("../assets/images/message.png")}
+          style={{ width: 20, height: 20 }}
+        />
         <TextInput
           placeholder="아이디를 입력해주세요."
           value={employeeId}
@@ -82,7 +90,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
       </View>
 
       <View style={styles.inputContainer}>
-        <Image source={require("../assets/images/lock.png")} style={{ width: 20, height: 20 }} />
+        <Image
+          source={require("../assets/images/lock.png")}
+          style={{ width: 20, height: 20 }}
+        />
         <TextInput
           placeholder="비밀번호를 입력해주세요."
           secureTextEntry

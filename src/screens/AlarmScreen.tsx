@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 type MainDrawerParamList = {
-  calendar: undefined;
+  CalendarScreen: undefined;
 };
 
 function AlarmScreen() {
@@ -46,7 +46,7 @@ function AlarmScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("calendar")}>
+        <TouchableOpacity onPress={() => navigation.navigate("CalendarScreen")}>
           <Image
             source={require("../assets/images/mypage/leftarrow2.png")}
             style={{ width: 20, height: 20 }}

@@ -11,7 +11,8 @@ import {
   Image,
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "./App";
+import { useNavigation } from "@react-navigation/native";
+import { authNavigations } from "../constants";
 
 const { width } = Dimensions.get("window");
 
@@ -51,13 +52,13 @@ const slides: Slide[] = [
   },
 ];
 
-type LandingScreenNavigationProp = StackNavigationProp<RootStackParamList, "LandingPage">;
+type AuthStackParamList = {
+  [authNavigations.LOGIN]: undefined;
+}
 
-type Props = {
-  navigation: LandingScreenNavigationProp;
-};
+const LandingPage: React.FC = () => {
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
-const LandingPage: React.FC<Props> = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -66,7 +67,7 @@ const LandingPage: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleStart = () => {
-    navigation.navigate("LoginPage");
+    navigation.navigate(authNavigations.LOGIN);
   };
 
   return (
