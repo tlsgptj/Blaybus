@@ -13,7 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "notification": {
-      "vapidPublicKey": "BFaYfdbHOLmtQLbx0zfxCOJKe5640hFQQkN1a9K9fbu-VtjyUBcCPyKbRbIHqZM1I9hvaqaBmglyqzdzrGH9DFw"
+      "vapidPublicKey": "BJ7Gu48VqTmJN-_ZZm76n2vhb9UXX5x-JKCS4VwMI0q0yV8ZbejOJFUEAFmmEuAJB3A7Fb6cmDwpMoSYAnmlUIY"
     },
     "ios": {
       "supportsTablet": true
