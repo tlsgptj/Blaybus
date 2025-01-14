@@ -10,9 +10,9 @@ import {
   NativeScrollEvent,
   Image,
 } from "react-native";
-import { useNavigation, NavigationProp, ParamListBase, NavigationContainer } from "@react-navigation/native";
-import LoginPage from "./Login";
 import { createStackNavigator } from "@react-navigation/stack";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../App";
 
 const { width } = Dimensions.get("window");
 
@@ -52,7 +52,13 @@ const slides: Slide[] = [
   },
 ];
 
-export default function LandingPage() {
+type LandingPageNavigationProp = StackNavigationProp<RootStackParamList, "LandingPage">;
+
+interface LandingPageProps {
+  navigation: LandingPageNavigationProp;
+}
+
+const LandingPage: React.FC<LandingPageProps> = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -60,15 +66,10 @@ export default function LandingPage() {
     setCurrentIndex(index);
   };
 
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const Stack = createStackNavigator();
 
   const handleStart = () => {
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    navigation.navigate("LoginPage");
   };
 
   return (
@@ -155,3 +156,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default LandingPage;

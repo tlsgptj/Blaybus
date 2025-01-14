@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
 
-type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, "LoginPage">;
 
 interface LoginPageProps {
   navigation: LoginPageNavigationProp;
@@ -55,7 +55,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
         Alert.alert("로그인 성공", `환영합니다, ${response.data.user.name}`);
         // 필요한 경우 다음 화면으로 이동
-        // navigation.navigate("NextScreen");
+         navigation.navigate("MainPage");
       } else {
         Alert.alert("로그인 실패", "아이디 또는 비밀번호가 올바르지 않습니다.");
       }
