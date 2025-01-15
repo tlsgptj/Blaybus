@@ -55,7 +55,7 @@ function Main() {
         >
           <View style={{ marginLeft: 10 }}>
             <Text style={styles.cardTitle}>
-              실시간으로 <br />
+              실시간으로 {"\n"}
               확인하는 나의 퀘스트
             </Text>
             <Text style={styles.cardSubtitle}>놓치는 퀘스트가 없는 날까지</Text>
@@ -76,7 +76,7 @@ function Main() {
               <Text style={styles.sectionTitle}>전체 게시판</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br />확인해보세요!
+                {"\n"}확인해보세요!
               </Text>
             </TouchableOpacity>
             <View style={styles.gridImgContainer}>
@@ -94,7 +94,7 @@ function Main() {
               <Text style={styles.sectionTitle}>랭킹</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br />확인해보세요!
+                {"\n"}확인해보세요!
               </Text>
             </TouchableOpacity>
             <View style={styles.gridImgContainer}>
@@ -112,7 +112,7 @@ function Main() {
               <Text style={styles.sectionTitle}>할일</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br />확인해보세요!
+                {"\n"}확인해보세요!
               </Text>
             </TouchableOpacity>
             <View style={styles.gridImgContainer}>
@@ -130,7 +130,7 @@ function Main() {
               <Text style={styles.sectionTitle}>캘린더</Text>
               <Text style={styles.sectionSubtitle}>
                 실시간으로
-                <br />확인해보세요!
+                {"\n"}확인해보세요!
               </Text>
             </TouchableOpacity>
             <View style={styles.gridImgContainer}>
@@ -152,7 +152,7 @@ function Main() {
           <View style={styles.experienceBox}>
             <View>
               <Text style={styles.experienceLabel}>
-                올해의 <br />적립 경험치
+                올해의 {"\n"}적립 경험치
               </Text>
             </View>
             <View style={{display:"flex", flexDirection:"row",justifyContent:"flex-end"}}>
@@ -162,7 +162,7 @@ function Main() {
 
           <View style={styles.experienceBox}>
             <View>
-              <Text style={styles.experienceLabel}>누적된 <br />적립 경험치</Text>
+              <Text style={styles.experienceLabel}>누적된 {"\n"}적립 경험치</Text>
             </View>
             <View style={{display:"flex", flexDirection:"row",justifyContent:"flex-end"}}>
               <Text style={styles.experienceValue}>37%</Text>
