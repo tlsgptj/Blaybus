@@ -13,10 +13,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
-
-type MainDrawerParamList = {
-  MainPage: undefined;
-};
+import { useAuth } from "../constants/AuthContext";
 
 const LoginPage: React.FC = () => {
   const [employeeId, setemployeeId] = useState("");
@@ -24,7 +21,7 @@ const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
+  const { setIsLogin } = useAuth();
 
   const handleLogin = async () => {
     if (!employeeId || !password) {
@@ -53,8 +50,8 @@ const LoginPage: React.FC = () => {
         console.log("Stored Access Token:", storedAccessToken);
         console.log("Stored Refresh Token:", storedRefreshToken);
 
+        setIsLogin(true);
         window.alert("로그인 성공");
-        navigation.navigate("MainPage");
       } else {
         window.alert("로그인 실패 : 아이디 또는 비밀번호가 올바르지 않습니다.");
       }

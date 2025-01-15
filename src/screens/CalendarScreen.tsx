@@ -1,5 +1,6 @@
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -31,36 +32,55 @@ function CalendarScreen() {
 
   const [tasks, setTasks] = useState([]);
 
-  // 백엔드 임시 데이터
-  const fetchTasks = async () => {
-    const mockData = [
-      {
-        id: "1",
-        date: "2025-02-02",
-        title: "TF퀘스트",
-      },
-      {
-        id: "2",
-        date: "2025-02-02",
-        title: "팀퀘스트",
-      },
-      {
-        id: "3",
-        date: "2025-02-03",
-        title: "리더퀘스트",
-      },
-      {
-        id: "4",
-        date: "2025-02-03",
-        title: "할일",
-      },
-    ];
-    // 데이터 세팅
-    setTasks(mockData);
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/quests/leader"
+      );
+
+         // 데이터 매핑
+    const mappedTasks = response.data.data.map((item) => {
+      const baseDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // 현재 달 첫째 날
+      const weekOffset = parseInt(item.week) - 1; // 주차 기준으로 계산 (1주차부터 시작)
+      const calculatedDate = new Date(baseDate.setDate(baseDate.getDate() + weekOffset * 7)); // 주차 기준 날짜 계산
+
+      // 날짜가 다음 달로 넘어가는 경우 처리
+      if (calculatedDate.getMonth() > currentDate.getMonth()) {
+        calculatedDate.setMonth(currentDate.getMonth() + 1); // 다음 달로 이동
+      }
+
+      return {
+        id: `${item.employeeInfoDto.idNumber}-${item.week}`,
+        date: `${calculatedDate.getFullYear()}-${(calculatedDate.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${calculatedDate.getDate().toString().padStart(2, "0")}`,
+        mainTitle: "리더퀘스트"  ,
+        title: item.leaderQuestDto.name || "리더퀘스트",
+        description: item.leaderQuestDto.maxCondition || "",
+        tag: "leaderQuest", // 태그 추가
+      };
+    });
+
+    setTasks(mappedTasks); // 태스크 업데이트
+
+      setData(response.data.data);
+      setError(null);
+      console.log("리더 데이터", response.data);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      setError("데이터를 가져오는데 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+ 
   useEffect(() => {
-    fetchTasks();
+    fetchData();
   }, []);
 
   const renderDayTasks = (day) => {
@@ -76,17 +96,17 @@ function CalendarScreen() {
     return dayTasks.map((task, index) => (
       <Text
         key={index}
-        style={[styles.taskText, getTaskStyle(task.title)]}
+        style={[styles.taskText, getTaskStyle(task.Maintitle)]}
         numberOfLines={1}
         ellipsizeMode="tail"
       >
-        {task.title}
+        {task.mainTitle}
       </Text>
     ));
   };
 
-  const getTaskStyle = (title) => {
-    switch (title) {
+  const getTaskStyle = (Maintitle) => {
+    switch (Maintitle) {
       case "TF퀘스트":
         return { color: "#808080" }; // 회색
       case "팀퀘스트":
@@ -96,7 +116,7 @@ function CalendarScreen() {
       case "할일":
         return { color: "#FFA500" }; // 주황색
       default:
-        return { color: "#000000" }; // 기본 검정색
+        return { color: "#FFD700" }; // 기본 검정색
     }
   };
 
@@ -175,12 +195,35 @@ function CalendarScreen() {
 
   const calendar = generateCalendar(currentDate);
 
-  const renderTaskItem = (task) => (
+  const getTagStyle = (tag: string) => {
+    switch (tag) {
+      case "very good":
+        return { backgroundColor: "#FF6347", color: "#fff" }; // 빨간색
+      case "good":
+        return { backgroundColor: "#FFD700", color: "#fff" }; // 노란색
+      case "normal":
+        return { backgroundColor: "#d3d3d3", color: "#000" }; // 회색
+      default:
+        return { backgroundColor: "#f2f2f2", color: "#000" }; // 기본 스타일
+    }
+  };
+
+  const renderTaskItem = (task: {
+    id: string;
+    title: string;
+    description: string;
+    date: string;
+  }) => (
     <View style={styles.taskItem} key={task.id}>
-      <View style={styles.taskHeader}>
-        <Text style={styles.taskTitle}>{task.title}</Text>
-        <Text style={[styles.taskTag, styles[task.tag]]}>{task.tag}</Text>
+      <View style={styles.dateContainer}>
+        <Text style={styles.dateText}>{task.date}</Text>
       </View>
+
+      <View style={styles.taskContent}>
+        <Text style={styles.taskTitle}>{task.title}</Text>
+        <Text style={styles.taskTag}>very good</Text>
+      </View>
+
       <Text style={styles.taskDescription}>{task.description}</Text>
     </View>
   );
@@ -291,7 +334,7 @@ function CalendarScreen() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>할 일 목록 ({selectedDate})</Text>
+            <Text style={styles.modalTitle}>({selectedDate})</Text>
             <ScrollView>
               {selectedTasks.length > 0 ? (
                 selectedTasks.map((task) => renderTaskItem(task))
@@ -358,12 +401,6 @@ function CalendarScreen() {
           </View>
         </View>
       </Modal>
-
-      {/* Footer */}
-      <Text style={styles.footerText}>
-        위 스케줄은 고객님이 삭제하기 전까지 1년간 보관되며, 1년 뒤 내용 및
-        스케줄은 자동 삭제 처리됩니다.
-      </Text>
     </View>
   );
 }
@@ -406,7 +443,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "80%",
-    height: 300,
+    height: 500,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
@@ -505,26 +542,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
   },
-  taskItem: {
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
   taskHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 5,
   },
-  taskTag: {
-    fontSize: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 5,
-    color: "#fff",
-  },
+
   verygood: {
     backgroundColor: "#ff4d4d",
   },
@@ -534,14 +557,7 @@ const styles = StyleSheet.create({
   neutral: {
     backgroundColor: "#d3d3d3",
   },
-  taskTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  taskDescription: {
-    fontSize: 14,
-    color: "#666",
-  },
+
   input: {
     height: 40,
     borderColor: "#ddd",
@@ -591,6 +607,55 @@ const styles = StyleSheet.create({
     marginTop: 2,
     maxWidth: "100%",
     overflow: "hidden",
+  },
+  taskItem: {
+    flexDirection: "column",
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  dateContainer: {
+    backgroundColor: "#f2f2f2",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    alignSelf: "flex-start",
+    marginBottom: 10,
+  },
+  dateText: {
+    fontSize: 14,
+    color: "#555",
+  },
+  taskContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  taskTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  taskTag: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    fontSize: 12,
+    fontWeight: "bold",
+    overflow: "hidden", // 텍스트가 넘치지 않도록 설정
+    backgroundColor: "#FF6347",
+    color: "#fff",
+  },
+  taskDescription: {
+    fontSize: 14,
+    color: "#777",
   },
 });
 

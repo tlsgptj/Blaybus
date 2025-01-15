@@ -1,4 +1,4 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import MainPage from "../../screens/Main";
@@ -17,7 +17,7 @@ const Drawer = createDrawerNavigator();
 
 function MainDrawerNavigator() {
   return (
-    <Drawer.Navigator initialRouteName="MainPage">
+    <Drawer.Navigator initialRouteName="MainPage" drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="MainPage" component={MainPage} />
       <Drawer.Screen name="MyPage" component={MyPage} />
       <Drawer.Screen name="BoardMain" component={BoardMain}/>
@@ -26,7 +26,7 @@ function MainDrawerNavigator() {
       <Drawer.Screen name="PostCard" component={PostCard}/>
       <Drawer.Screen name="LoginPage" component={LoginPage}/>
       <Drawer.Screen name="LandingPage" component={LandingPage} />
-      <Drawer.Screen name="CalendarScreen" component={CalendarScreen} />
+      <Drawer.Screen name="CalendarScreen" component={CalendarScreen} options={{}}/>
       <Drawer.Screen name="AlarmScreen" component={AlarmScreen} />
       <Drawer.Screen name="PushAlramScreen" component={PushAlramScreen}/>
     </Drawer.Navigator>
