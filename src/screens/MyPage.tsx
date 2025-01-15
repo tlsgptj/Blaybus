@@ -1,6 +1,7 @@
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
 import {
   FlatList,
   Image,
@@ -11,9 +12,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type MainDrawerParamList = {
   EditProfile : undefined;
+}
+
+interface EmployeeData {
+  name: string;
+  idNumber : string;
+  character: string;
+  startData : string;
+  level : string;
+  departmentDto : {
+    name: string;
+  };
 }
 
 function MyPage() {
@@ -22,23 +35,36 @@ function MyPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [EmployeeData, setEmployeeData] = useState<EmployeeData | null>(null);
 
   const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
 
-  const levelData = [
-    { level: "F1-I", experience: "0" },
-    { level: "F1-II", experience: "13,500" },
-    { level: "F2-I", experience: "27,000" },
-    { level: "F2-II", experience: "39,000" },
-    { level: "F2-III", experience: "51,000" },
-    { level: "F3-I", experience: "63,000" },
-    { level: "F3-II", experience: "78,000" },
-  ];
+  useEffect(() => {
+    fetchMyPage();
+  }, []);
 
-  // 가상 사용자 데이터
-  const userData = {
-    id: "testuser",
-    password: "123",
+  const fetchMyPage = async () => {
+    try {
+      const token = await AsyncStorage.getItem("accessToken");
+      if (!token) {
+        console.error("토큰 없음");
+        return;
+      }
+      const response = await axios.get(
+        "http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/employees",
+        {
+          headers: {
+            Authorization : `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.status === 200 && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        setEmployeeData(response.data.data[0]);
+      }
+    } catch (error) {
+      console.error("데이터 fetching 실패 : ", error);
+    }
   };
 
   const toggleModal = () => {
@@ -51,7 +77,7 @@ function MyPage() {
   };
 
   const handleConfirm = () => {
-    if (id === userData.id && password === userData.password) {
+    if () {
       toggleEditModal();
       navigation.navigate("EditProfile");
     } else {
@@ -66,7 +92,7 @@ function MyPage() {
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Image source={require("../assets/images/mypage/leftarrow2.png")} style={styles.arrow}/>
+          <Image source={require("../assets/images/mypage/leftarrow2.png")}/>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>마이페이지</Text>
       </View>
@@ -125,7 +151,8 @@ function MyPage() {
                 <Text style={styles.closeButton}>X</Text>
               </TouchableOpacity>
             </View>
-            {/* 레벨 데이터 리스트 */}
+
+
             <FlatList
               data={levelData}
               keyExtractor={(item) => item.level}

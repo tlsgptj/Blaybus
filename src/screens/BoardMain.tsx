@@ -5,6 +5,7 @@ import RankingItem from "../components/RankingItem";
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type BoardScreenNavigationProp = StackNavigationProp<RootStackParamList, "BoardMain">;
 
@@ -18,29 +19,67 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
   const [postData, setPostData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePostPress = (id: string) => {
+  const handlePostPress = (id: Number) => {
     navigation.navigate("PostCard", { postId: id });
   };
 
-  const fetchRankingData = async () => {
-    setIsLoading(true);
+  const fetchTotalExp = async () => {
     try {
-      const response = await axios.get("http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/exp");
-      setRankingData(response.data);
+      const token = await AsyncStorage.getItem("accessToken");
+      if (!token) {
+        console.error("Access token is missing");
+        return;
+      }
+
+      const response = await axios.get(
+        "http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/exp",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.status === 200 && Array.isArray(response.data.data)) {
+        const totalExpSum = response.data.data.reduce((sum: number, item: any) => sum + item.totalExp, 0);
+
+        const sortedData = response.data.data.map((item: any, index: number) => {
+          const percentage = totalExpSum > 0 ? ((item.totalExp / totalExpSum) * 100).toFixed(2) : "0.00";
+          return {
+            id: Number,
+            employeeName: item.employeeName,
+            department: item.department,
+            percentage: parseFloat(percentage),
+          };
+        });
+
+        console.log("Sorted Data:", sortedData);
+        setRankingData(sortedData.sort((a, b) => b.percentage - a.percentage));
+      } else {
+        console.error("Unexpected response format or status is not 0");
+      }
     } catch (error) {
-      console.error("Failed to fetch ranking data:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Failed to fetch totalExp:", error.response?.data || error.message);
     }
   };
 
   const fetchPostData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/board");
-      if (response.data.status === 0) {
+      const token = await AsyncStorage.getItem("accessToken");
+      if (!token) {
+        console.error("Access token is missing");
+        return;
+      }
+
+      const response = await axios.get(
+        "http://code-craft-alb-1326215415.ap-northeast-2.elb.amazonaws.com/board",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.status === 200) {
         const formattedData = response.data.data.map((item: any, index: number) => ({
-          id: index.toString(),
+          id: Number,
           title: item.title,
           content: item.contents,
           category: "기타",
@@ -49,10 +88,10 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
         }));
         setPostData(formattedData);
       } else {
-        console.error("Failed to fetch post data:", response.data.message);
+        console.error("Failed to fetch post data1:", response.data.message);
       }
     } catch (error) {
-      console.error("Failed to fetch post data:", error);
+      console.error("Failed to fetch post data2:", error);
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +99,7 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (activeTab === "랭킹") {
-      fetchRankingData();
+      fetchTotalExp();
     } else if (activeTab === "게시판") {
       fetchPostData();
     }
@@ -104,12 +143,12 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
         <FlatList
           data={rankingData}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <RankingItem
-              rank={item.rank}
-              name={item.name}
-              team={item.team}
-              progress={item.progress}
+              rank={index + 1}
+              name={item.employeeName}
+              team={item.department}
+              progress={item.percentage}
             />
           )}
         />
@@ -126,8 +165,6 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 16, color: "#888" },
   activeTabText: { color: "#000", fontWeight: "bold" },
   loader: { flex: 1, justifyContent: "center", alignItems: "center" },
-  rankingHeader: { backgroundColor: "#f5f5f5", padding: 20, alignItems: "center" },
-  rankingText: { fontSize: 16, fontWeight: "bold" },
 });
 
 export default BoardMain;
