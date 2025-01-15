@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 80,
+    bottom: 50,
     width: "100%",
     alignItems: "center",
   },

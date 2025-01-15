@@ -6,11 +6,11 @@ import Login from "../../screens/Login";
 import LandingPage from "../../screens/Landing";
 import LoginPage from "../../screens/Login";
 import MainPage from "../../screens/Main";
+import Main from "../../screens/Main";
 
 export type AuthStackParamList = {
   [authNavigations.LOGIN]: undefined;
   [authNavigations.LANDING]: undefined;
-  [authNavigations.MAIN] : undefined;
 };
 
 function AuthStackNavigator() {

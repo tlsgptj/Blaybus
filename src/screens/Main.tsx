@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "rea
 type MainDrawerParamList = {
   BoardMain :undefined;
   CalendarScreen : undefined;
+  AllExperience : undefined;
 }
 
 function Main() {
@@ -184,7 +185,7 @@ function Main() {
               한눈에 나의 성과를 확인해보세요!
             </Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("AllExperience")}>
             <Text style={styles.moreText}>더보기 &gt;</Text>
           </TouchableOpacity>
         </View>
