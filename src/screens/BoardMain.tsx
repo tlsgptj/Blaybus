@@ -19,7 +19,7 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
   const [postData, setPostData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePostPress = (id: string) => {
+  const handlePostPress = (id: Number) => {
     navigation.navigate("PostCard", { postId: id });
   };
 
@@ -44,7 +44,7 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
         const sortedData = response.data.data.map((item: any, index: number) => {
           const percentage = totalExpSum > 0 ? ((item.totalExp / totalExpSum) * 100).toFixed(2) : "0.00";
           return {
-            id: index.toString(),
+            id: Number,
             employeeName: item.employeeName,
             department: item.department,
             percentage: parseFloat(percentage),
@@ -79,7 +79,7 @@ const BoardMain: React.FC<BoardMainProps> = ({ navigation }) => {
 
       if (response.data.status === 200) {
         const formattedData = response.data.data.map((item: any, index: number) => ({
-          id: index.toString(),
+          id: Number,
           title: item.title,
           content: item.contents,
           category: "기타",

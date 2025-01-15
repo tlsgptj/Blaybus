@@ -6,7 +6,7 @@ import axios from "axios";
 
 export default function PostCardDetail() {
   const route = useRoute();
-  const { id } = route.params as { id: string };
+  const { id } = route.params as { id: Number };
   const [postData, setPostData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
